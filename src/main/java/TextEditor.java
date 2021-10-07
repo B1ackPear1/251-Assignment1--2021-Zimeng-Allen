@@ -26,6 +26,7 @@ public class TextEditor extends JFrame {
     private JMenuItem copyitem = new JMenuItem("Copy");
     private JMenuItem pasteitem = new JMenuItem("Paste");
     private JMenuItem aboutitem = new JMenuItem("About");
+    private JMenuItem printitem
     private JPopupMenu right = new JPopupMenu();
     private JFileChooser jfc = new JFileChooser();
     private JScrollPane scroll = new JScrollPane(jta);
