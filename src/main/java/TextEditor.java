@@ -1,14 +1,17 @@
 //import com.sun.jdi.event.StepEvent;
 import org.apache.commons.io.FileUtils;
 
-import javax.management.timer.Timer;
 import javax.print.*;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.Copies;
 import javax.print.attribute.standard.Sides;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
@@ -16,7 +19,6 @@ import java.io.*;
 
 
 public class TextEditor extends JFrame {
-    //    public boolean neworopen = true;
     static JFrame frame = new JFrame("Text Editor");
     private JMenuBar jmb = new JMenuBar();
     private JTextArea jta = new JTextArea();
@@ -32,22 +34,32 @@ public class TextEditor extends JFrame {
     private JMenuItem exititem = new JMenuItem("Exit");
     private JMenuItem copyitem = new JMenuItem("Copy");
     private JMenuItem pasteitem = new JMenuItem("Paste");
+    private JMenuItem cutitem = new JMenuItem("cut");
+    private JMenuItem selectitem = new JMenuItem("Select");
     private JMenuItem aboutitem = new JMenuItem("About");
     private JMenuItem printitem = new JMenuItem("Print");
-    private JMenuItem fontitem = new JMenuItem("Font");
     private JPopupMenu right = new JPopupMenu();
     private JFileChooser jfc = new JFileChooser();
     private JScrollPane scroll = new JScrollPane(jta);
-    File filePath;
-
+    private JLabel time = new JLabel();
+    private Clipboard clipboard ;
+    static FileNameExtensionFilter filter1 = new FileNameExtensionFilter("java","java");
+    static FileNameExtensionFilter filter2 = new FileNameExtensionFilter("python","py");
+    static FileNameExtensionFilter filter3 = new FileNameExtensionFilter("c","c");
+    static FileNameExtensionFilter filter4 = new FileNameExtensionFilter("txt","txt");
+    static FileNameExtensionFilter filter5 = new FileNameExtensionFilter("rtf","rtf");
+    static FileNameExtensionFilter filter6 = new FileNameExtensionFilter("odt","odt");
 
     public static void main(String[] args) {
         TextEditor te = new TextEditor();
         te.function(te);
+        File f = new File(te.getClass().getResource("").getPath());
+        System.out.println(f);
     }
 
-    public void function(TextEditor textEditor) {
+    public void function(TextEditor textEditor){
         textEditor.window();
+        textEditor.rightlistening();
         textEditor.searchlistening();
         textEditor.newlistening();
         textEditor.openlistening();
@@ -65,7 +77,6 @@ public class TextEditor extends JFrame {
         jmb.add(viewmenu);
         jmb.add(managemenu);
         jmb.add(helpmenu);
-//        jmb.add(timeAndDate());
         filemenu.add(newitem);
         filemenu.add(openitem);
         filemenu.add(saveitem);
@@ -78,22 +89,82 @@ public class TextEditor extends JFrame {
 //        frame.getContentPane().setBackground(Color.orange);
         right.add(copyitem);
         right.add(pasteitem);
+        right.add(cutitem);
+        right.add(selectitem);
         jta.setCaretPosition(jta.getText().length());
+        jta.setLineWrap(true);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         frame.getContentPane().add(scroll);
+    }
+
+    public void rightlistening(){
+        jta.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                if (e.isPopupTrigger()){
+                    right.show(frame,e.getX(),e.getY());
+//                    if (jta.getSelectionEnd() - jta.getSelectionStart() > 0)
+                    if (jta.isFocusable()){
+                        copylistening();
+                        pastelistening();
+                        cutlistening();
+                        selectalllistening();
+                    }}
+            }
+        });
+    }
+
+    public void copylistening(){
+        copyitem.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                jta.copy();
+            }
+        });
+    }
+
+    public void pastelistening(){
+        pasteitem.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                Transferable text = new StringSelection(jta.getSelectedText());
+                jta.paste();
+                clipboard.setContents(text,null);
+            }
+        });
+    }
+
+    public void cutlistening(){
+        cutitem.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                jta.cut();
+            }
+        });
+    }
+
+    public void selectalllistening(){
+        selectitem.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                jta.selectAll();
+            }
+        });
     }
 
     public void news() throws IOException {
         JOptionPane panel = new JOptionPane();
         panel.setBackground(Color.cyan);
         int n = JOptionPane.showConfirmDialog(frame, "Are you sure you want to create a new window?");
-        if (n == 0) {
-            if (frame.getTitle().equals("Text Editor")) {
-                saveanother();
-            } else {
-                save();
-            }
+        if (n == 0){
+            saveanother();
             jta.setText("");
             frame.setTitle("Text Editor");
         }
@@ -113,65 +184,67 @@ public class TextEditor extends JFrame {
             }
         });
     }
-
-    public void save() throws IOException {
-        if (frame.getTitle().equals("Text Editor")) {
-            saveanother();
-        } else {
-            String fullpath = frame.getTitle();
-            FileUtils.write(new File(fullpath), jta.getText(), "utf-8", false);
-        }
-    }
     public String name_save;
-    public String name_open;
-    public void saveanother() {
-        JFileChooser jfc1 = new JFileChooser();
-//        jfc1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        try {
-//            jfc1.addChoosableFileFilter(new FileNameExtensionFilter("txt","文本文档"));
-            if (jfc1.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
-                String path = jfc1.getCurrentDirectory().getAbsolutePath();
-//                        if (!dir.exists()){
-//                            dir.getParentFile().mkdirs();
-//                        }
-//                        dir.createNewFile();
-                File f = jfc1.getSelectedFile();
-                if (jfc1.getSelectedFile() != null) {
-//                    name = f.getName();
-                    name_save = f.getAbsolutePath() + ".txt";
-//                    name = jfc1.getSelectedFile().getName();
-                } else {
-                    name_save = "assignment";
-                }
+    public void saveanother() throws IOException {
+        if (frame.getTitle().equals("Text Editor")){
+            JFileChooser jfc1 = new JFileChooser();
+//            jfc1.setFileFilter(filter);
+//            jfc1.addChoosableFileFilter(filter);
+//            jfc1.setFileFilter(filter1);
+//            jfc1.setFileFilter(filter2);
+//            jfc1.setFileFilter(filter3);
+//            jfc1.setFileFilter(filter4);
+//            jfc1.setFileFilter(filter);
+//            String name;
+            try{
+                if (jfc1.showSaveDialog(frame)==JFileChooser.APPROVE_OPTION){
+                    File f = jfc1.getSelectedFile();
+                    if(jfc1.getSelectedFile()!=null){
+                        name_save = f.getAbsolutePath() + ".txt";
+//                        name = f.getAbsolutePath();
+                    }else{
+                        name_save = "assignment";
+                    }
 //                String fullpath = path + "\\" + name;
 //                File file = new File(name,fullpath);
 //                if (!file.exists()){
 //                    file.createNewFile();
 //                }
-                BufferedWriter bf = new BufferedWriter(new FileWriter(name_save));
-                bf.write(jta.getText());
-                bf.flush();
-                bf.close();
+                    BufferedWriter bf = new BufferedWriter(new FileWriter(name_save));
+                    bf.write(jta.getText());
+                    bf.flush();
+                    bf.close();
+                }
+            }catch (Exception ex){
+                JOptionPane.showMessageDialog(frame,ex.getMessage());
             }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(frame, ex.getMessage());
+        }else {
+            String fullpath = frame.getTitle();
+            FileUtils.write(new File(fullpath),jta.getText(),"utf-8",false);
         }
+
     }
 
-    public void savelistening() {
+    public void savelistening(){
         saveitem.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 try {
-                    save();
+                    saveanother();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             }
         });
     }
-
-    public void open() {
+    public String name_open;
+    public void open(){
+//        jfc.setFileFilter(filter1);
+//        jfc.setFileFilter(filter2);
+//        jfc.setFileFilter(filter3);
+//        jfc.setFileFilter(filter4);
+//        jfc.setFileFilter(filter5);
+//        jfc.setFileFilter(filter6);
         try {
             if (jfc.showOpenDialog(frame) != JFileChooser.APPROVE_OPTION) {
                 return;
@@ -181,6 +254,7 @@ public class TextEditor extends JFrame {
             BufferedReader bf = new BufferedReader(new FileReader(name_open));
             String string = bf.readLine();
             String content = "";
+            byte[] b = new byte[(int) name_open.length()];
             while (string != null) {
                 content += string;
                 content += "\n";
@@ -194,7 +268,7 @@ public class TextEditor extends JFrame {
         }
     }
 
-    public void openlistening() {
+    public void openlistening(){
         openitem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -202,7 +276,6 @@ public class TextEditor extends JFrame {
             }
         });
     }
-
     class searching extends JDialog {
         //a new searching window
         public searching() {
@@ -218,7 +291,7 @@ public class TextEditor extends JFrame {
             String inputV = JOptionPane.showInputDialog("Please input a word ");
             int length = inputV.length();
             int a = jta.getText().indexOf(inputV);
-            jta.requestFocus();
+//            jta.requestFocusInWindow();
             jta.setSelectionStart(a);
             jta.setSelectionEnd(a + length);
         }
@@ -234,7 +307,7 @@ public class TextEditor extends JFrame {
         });
     }
 
-    public void exitlistening() {
+    public void exitlistening(){
         exititem.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -245,14 +318,14 @@ public class TextEditor extends JFrame {
         });
     }
 
-    public void about() {
+    public void about(){
         String author = "This editor is written by Zimeng Fu and Allen Wang";
         JOptionPane aboutt = new JOptionPane();
         aboutt.setBackground(Color.cyan);
-        aboutt.showMessageDialog(frame, author, "Author", 1);
+        aboutt.showMessageDialog(frame, author,"Author",1);
     }
 
-    public void aboutlistening() {
+    public void aboutlistening(){
         aboutitem.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -262,20 +335,10 @@ public class TextEditor extends JFrame {
         });
     }
 
-
-    public void timeAndDate()
-    //
-    {
-        JFrame frame = new JFrame();
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-        final JLabel time = new JLabel("Time");
-        Timer timer = new Timer();
-    }
-
     public void OpenPrinter(File file, String printerName) throws PrinterException {
         if (file == null) {
-            System.err.println("Not find the file");
+//            System.err.println("Not find the file");
+            JOptionPane.showMessageDialog(frame,"Not find the file");
         }
         InputStream fis = null;
         try {
@@ -287,7 +350,8 @@ public class TextEditor extends JFrame {
             if (printerName != null) {
                 PrintService[] printServices = PrinterJob.lookupPrintServices();
                 if (printServices == null || printServices.length == 0) {
-                    System.out.print("print failure. No available printer");
+//                    System.out.print("print failure. No available printer");
+                    JOptionPane.showMessageDialog(frame,"print failure. No available printer");
                     return;
                 }
                 for (int i = 0; i < printServices.length; i++) {
@@ -298,7 +362,8 @@ public class TextEditor extends JFrame {
                     }
                 }
                 if (printService == null) {
-                    System.out.print("print failure, not find " + printerName);
+//                    System.out.print("print failure, not find " + printerName);
+                    JOptionPane.showMessageDialog(frame,"print failure, not find " + printerName);
                     return;
                 }
             }
@@ -307,13 +372,13 @@ public class TextEditor extends JFrame {
             DocPrintJob job = printService.createPrintJob();
             job.print(doc, aset);
         } catch (FileNotFoundException | PrintException e1) {
-            e1.printStackTrace();
+            JOptionPane.showMessageDialog(frame,e1.getMessage());
         } finally {
             if (fis != null) {
                 try {
                     fis.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(frame,e.getMessage());
                 }
             }
         }
@@ -326,7 +391,7 @@ public class TextEditor extends JFrame {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 try {
-                    save();
+                    saveanother();
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
