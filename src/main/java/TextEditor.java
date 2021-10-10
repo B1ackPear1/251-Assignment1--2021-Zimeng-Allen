@@ -34,6 +34,7 @@ public class TextEditor extends JFrame {
     private JMenuItem pasteitem = new JMenuItem("Paste");
     private JMenuItem aboutitem = new JMenuItem("About");
     private JMenuItem printitem = new JMenuItem("Print");
+    private JMenuItem fontitem = new JMenuItem("Font");
     private JPopupMenu right = new JPopupMenu();
     private JFileChooser jfc = new JFileChooser();
     private JScrollPane scroll = new JScrollPane(jta);
@@ -121,7 +122,8 @@ public class TextEditor extends JFrame {
             FileUtils.write(new File(fullpath), jta.getText(), "utf-8", false);
         }
     }
-    public String name;
+    public String name_save;
+    public String name_open;
     public void saveanother() {
         JFileChooser jfc1 = new JFileChooser();
 //        jfc1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -136,17 +138,17 @@ public class TextEditor extends JFrame {
                 File f = jfc1.getSelectedFile();
                 if (jfc1.getSelectedFile() != null) {
 //                    name = f.getName();
-                    name = f.getAbsolutePath() + ".txt";
+                    name_save = f.getAbsolutePath() + ".txt";
 //                    name = jfc1.getSelectedFile().getName();
                 } else {
-                    name = "assignment";
+                    name_save = "assignment";
                 }
 //                String fullpath = path + "\\" + name;
 //                File file = new File(name,fullpath);
 //                if (!file.exists()){
 //                    file.createNewFile();
 //                }
-                BufferedWriter bf = new BufferedWriter(new FileWriter(name));
+                BufferedWriter bf = new BufferedWriter(new FileWriter(name_save));
                 bf.write(jta.getText());
                 bf.flush();
                 bf.close();
@@ -174,9 +176,9 @@ public class TextEditor extends JFrame {
             if (jfc.showOpenDialog(frame) != JFileChooser.APPROVE_OPTION) {
                 return;
             }
-            String FileName = jfc.getSelectedFile().getAbsolutePath();
+            name_open = jfc.getSelectedFile().getAbsolutePath();
             String framename = jfc.getSelectedFile().getName();
-            BufferedReader bf = new BufferedReader(new FileReader(FileName));
+            BufferedReader bf = new BufferedReader(new FileReader(name_open));
             String string = bf.readLine();
             String content = "";
             while (string != null) {
@@ -318,6 +320,7 @@ public class TextEditor extends JFrame {
     }
 
     public void printlistening(){
+        final String[] name = new String[1];
         printitem.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -328,8 +331,13 @@ public class TextEditor extends JFrame {
                     ioException.printStackTrace();
                 }
                 String printerName = "HP MFP M436 PCL6";
+                if (frame.getTitle().equals("Text Editor")){
+                    name[0] = name_save;
+                }else {
+                    name[0] = name_open;
+                }
                 try {
-                    OpenPrinter(new File(name), printerName);
+                    OpenPrinter(new File(name[0]), printerName);
                 } catch (PrinterException printerException) {
                     printerException.printStackTrace();
                 }
