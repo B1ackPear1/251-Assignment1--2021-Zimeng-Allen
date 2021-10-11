@@ -16,6 +16,10 @@ import java.awt.event.*;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class TextEditor extends JFrame {
@@ -41,8 +45,8 @@ public class TextEditor extends JFrame {
     private JPopupMenu right = new JPopupMenu();
     private JFileChooser jfc = new JFileChooser();
     private JScrollPane scroll = new JScrollPane(jta);
-    private JLabel time = new JLabel();
-    private Clipboard clipboard ;
+    private JLabel time = new JLabel("Time");
+    private Clipboard clipboard;
     static FileNameExtensionFilter filter1 = new FileNameExtensionFilter("java","java");
     static FileNameExtensionFilter filter2 = new FileNameExtensionFilter("python","py");
     static FileNameExtensionFilter filter3 = new FileNameExtensionFilter("c","c");
@@ -53,6 +57,7 @@ public class TextEditor extends JFrame {
     public static void main(String[] args) {
         TextEditor te = new TextEditor();
         te.function(te);
+        te.timeAndDate();
         File f = new File(te.getClass().getResource("").getPath());
         System.out.println(f);
     }
@@ -77,6 +82,7 @@ public class TextEditor extends JFrame {
         jmb.add(viewmenu);
         jmb.add(managemenu);
         jmb.add(helpmenu);
+        jmb.add(time);
         filemenu.add(newitem);
         filemenu.add(openitem);
         filemenu.add(saveitem);
@@ -408,5 +414,17 @@ public class TextEditor extends JFrame {
                 }
             }
         });
+    }
+    public void timeAndDate(){
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                long timemillis = System.currentTimeMillis();
+                SimpleDateFormat df = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+                time.setText(df.format(new Date(timemillis)));
+            }
+        };
+        timer.schedule(task, 1000, 1000);
     }
 }
