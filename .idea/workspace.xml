@@ -5,14 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="afdec916-844c-4131-ab7c-13f6bcb8509f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_assertj_assertj_swing_jide_3_9_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_16.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/assignment1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assignment1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/complexity.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/metrics.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/TextEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/TextEditor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/TextEditorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TextEditorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/阿萨德.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

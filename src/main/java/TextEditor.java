@@ -8,6 +8,7 @@ import javax.print.attribute.standard.Copies;
 import javax.print.attribute.standard.Sides;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -17,9 +18,7 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.TimerTask;
-import java.util.Date;
+import java.util.*;
 import java.util.Timer;
 
 public class TextEditor extends JFrame {
@@ -46,6 +45,7 @@ public class TextEditor extends JFrame {
     private final JFileChooser jfc = new JFileChooser();
     private final JScrollPane scroll = new JScrollPane(jta);
     private final JLabel time = new JLabel();
+    private final JMenuItem changecolor = new JMenuItem("Color");
     private Clipboard clipboard ;
     static FileNameExtensionFilter filter1 = new FileNameExtensionFilter("java","java");
     static FileNameExtensionFilter filter2 = new FileNameExtensionFilter("python","py");
@@ -55,10 +55,23 @@ public class TextEditor extends JFrame {
     static FileNameExtensionFilter filter6 = new FileNameExtensionFilter("odt","odt");
 
     public static void main(String[] args) {
+        initfont(new Font("楷体",Font.PLAIN,15));
         TextEditor te = new TextEditor();
+
         te.function(te);
         File f = new File(te.getClass().getResource("").getPath());
         System.out.println(f);
+    }
+
+    private static void initfont(Font font){
+        FontUIResource f = new FontUIResource(font);
+        for(Enumeration<Object> keys = UIManager.getDefaults().keys();keys.hasMoreElements();){
+            Object key = keys.nextElement();
+            Object value = UIManager.get(key);
+            if (value instanceof FontUIResource){
+                UIManager.put(key,f);
+            }
+        }
     }
 
     public void function(TextEditor textEditor){
@@ -96,6 +109,7 @@ public class TextEditor extends JFrame {
         right.add(pasteitem);
         right.add(cutitem);
         right.add(selectitem);
+        right.add(changecolor);
         jta.setCaretPosition(jta.getText().length());
         jta.setLineWrap(true);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -285,6 +299,7 @@ public class TextEditor extends JFrame {
                         pastelistening();
                         cutlistening();
                         selectalllistening();
+                        changecolorlistening();
                     }}
             }
         });
@@ -333,6 +348,15 @@ public class TextEditor extends JFrame {
         });
     }
 
+    public void changecolorlistening(){
+        changecolor.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                jta.setSelectionColor(Color.cyan);
+            }
+        });
+    }
 
     public void OpenPrinter(File file, String printerName) throws PrinterException {
         if (file == null) {
@@ -408,7 +432,7 @@ public class TextEditor extends JFrame {
             @Override
             public void run() {
                 long timemillis = System.currentTimeMillis();
-                SimpleDateFormat df = new SimpleDateFormat("                                           yyyy:MM:dd HH:mm:ss");
+                SimpleDateFormat df = new SimpleDateFormat("   yyyy:MM:dd HH:mm:ss");
                 time.setText(df.format(new Date(timemillis)));
             }
         };
