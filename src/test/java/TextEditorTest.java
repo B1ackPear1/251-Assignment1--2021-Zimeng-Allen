@@ -1,12 +1,15 @@
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.fixture.JPopupMenuFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
 import org.assertj.swing.testng.testcase.AssertJSwingTestngTestCase;
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
 import org.testng.annotations.BeforeClass;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,23 +20,19 @@ import static org.junit.Assert.*;
 import static org.assertj.swing.launcher.ApplicationLauncher.application;
 import static org.assertj.swing.finder.WindowFinder.findFrame;
 
-public class TextEditorTest {
+public class TextEditorTest extends AssertJSwingTestngTestCase{
 
-    private FrameFixture window;
+    protected FrameFixture window;
+    protected JPopupMenuFixture menu;
+    protected JTextComponentFixture text;
     private final File TextOpen = new File("TextOpen");
 
-    @BeforeClass
-    public static void setUpOnce() {
-        FailOnThreadViolationRepaintManager.install();
-    }
-
-    @Before
-    public void setUp() {
+    @Override
+    protected void onSetUp() {
         TextEditor frame = GuiActionRunner.execute(TextEditor::new);
-        window = new FrameFixture(frame);
-        window.show(); // shows the frame to test
+        window = new FrameFixture(robot(),frame);
+        window.show();
     }
-
 
     @org.junit.Test
     public void savelistening() {
@@ -60,15 +59,12 @@ public class TextEditorTest {
 
         @org.junit.Test
     public void searchlistening() {
-        window.textBox("jta").enterText("a,b,c,d,e,f,g,h,i,g,k,l,m,n");
-        window.menuItem("Search").click();
+        text.enterText("a,b,c,d,e,f,g,h,i,g,k,l,m,n");
+        menu.menuItem("Search").click();
 //        window.textBox("panel").requireText("a");
-        window.optionPane().requireMessage("a");
-        window.textBox("jta").select("a");
-    }
+//        window.optionPane().requireMessage("a");
 
-    @After
-    public void tearDown() {
-        window.cleanUp();
-    }
+        window.textBox("jta").select("a");
+           }
+
 }

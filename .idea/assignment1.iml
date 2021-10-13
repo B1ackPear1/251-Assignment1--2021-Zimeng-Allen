@@ -22,5 +22,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.assertj:assertj-core:3.11.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.easytesting:fest-util:1.2.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.easytesting:fest-reflect:1.4.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.assertj:assertj-swing-jide:3.9.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.slf4j:slf4j-api:1.7.16" level="project" />
   </component>
 </module>
