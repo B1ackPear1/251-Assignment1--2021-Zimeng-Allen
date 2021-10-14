@@ -7,7 +7,7 @@ import java.awt.*;
 import java.io.*;
 
 import static org.junit.Assert.*;
-
+//test
 public class TextEditorTest {
 
     @Test
