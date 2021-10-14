@@ -5,10 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="afdec916-844c-4131-ab7c-13f6bcb8509f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/text" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/assignment1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assignment1.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_yaml_snakeyaml_1_17.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_yaml_snakeyaml_1_16.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/complexity.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/metrics.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/TextEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/TextEditor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/TextEditorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TextEditorTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +50,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../tut4" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -86,6 +92,26 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TextEditorTest.openlistening" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="assignment1" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TextEditorTest" />
+      <option name="METHOD_NAME" value="openlistening" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TextEditorTest.savelistening" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="assignment1" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TextEditorTest" />
+      <option name="METHOD_NAME" value="savelistening" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="TextEditorTest.searchlistening" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="assignment1" />
       <option name="PACKAGE_NAME" value="" />
@@ -98,8 +124,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.TextEditorTest" />
         <item itemvalue="JUnit.TextEditorTest.searchlistening" />
+        <item itemvalue="JUnit.TextEditorTest.openlistening" />
+        <item itemvalue="JUnit.TextEditorTest.savelistening" />
+        <item itemvalue="JUnit.TextEditorTest" />
         <item itemvalue="JUnit.TextEditorTest.open" />
       </list>
     </recent_temporary>
@@ -126,5 +154,8 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/TextEditor_java$TextEditorTest_savelistening.ic" NAME="TextEditorTest.savelistening Coverage Results" MODIFIED="1634208470843" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

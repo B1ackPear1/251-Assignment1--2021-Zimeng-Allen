@@ -1,5 +1,7 @@
 //import com.sun.jdi.event.StepEvent;
+
 import org.apache.commons.io.FileUtils;
+import org.yaml.snakeyaml.Yaml;
 
 import javax.print.*;
 import javax.print.attribute.HashPrintRequestAttributeSet;
@@ -17,6 +19,8 @@ import java.awt.event.*;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Timer;
@@ -47,23 +51,23 @@ public class TextEditor extends JFrame {
     private final JLabel time = new JLabel();
     private final JMenuItem changecolor = new JMenuItem("Color");
     private Clipboard clipboard ;
-    static FileNameExtensionFilter filter1 = new FileNameExtensionFilter("java","java");
-    static FileNameExtensionFilter filter2 = new FileNameExtensionFilter("python","py");
-    static FileNameExtensionFilter filter3 = new FileNameExtensionFilter("c","c");
-    static FileNameExtensionFilter filter4 = new FileNameExtensionFilter("txt","txt");
-    static FileNameExtensionFilter filter5 = new FileNameExtensionFilter("rtf","rtf");
-    static FileNameExtensionFilter filter6 = new FileNameExtensionFilter("odt","odt");
 
-    public static void main(String[] args) {
-        initfont(new Font("楷体",Font.PLAIN,15));
+    public static void main(String[] args) throws FileNotFoundException {
+        Yaml y = new Yaml();
+        FileReader reader = new FileReader("config.yaml");
+        BufferedReader bf = new BufferedReader(reader);
+        Map map = (Map) y.load(bf);
+        String name = (String) map.get("name");
+        int size = (int) map.get("size");
+        initfont(new Font(name,Font.PLAIN,size));
+//        initfont(new Font("楷体",Font.PLAIN,15));
         TextEditor te = new TextEditor();
-
         te.function(te);
-        File f = new File(te.getClass().getResource("").getPath());
-        System.out.println(f);
     }
+    private static void initfont(Font font) throws FileNotFoundException {
 
-    private static void initfont(Font font){
+
+
         FontUIResource f = new FontUIResource(font);
         for(Enumeration<Object> keys = UIManager.getDefaults().keys();keys.hasMoreElements();){
             Object key = keys.nextElement();
@@ -218,41 +222,6 @@ public class TextEditor extends JFrame {
                 jta.setSelectionStart(a);
                 jta.setSelectionEnd(a + length);
                 super.mousePressed(e);
-//                JDialog search = new JDialog(frame,"Search");
-//                JLabel searching = new JLabel("Please input a word");
-//                JTextField input = new JTextField(10);
-//                JButton next = new JButton("Next");
-//                search.setBackground(Color.CYAN);
-//                search.add(searching,BorderLayout.LINE_START);
-//                search.add(input,BorderLayout.CENTER);
-//                search.add(next,BorderLayout.EAST);
-//                search.setBounds(200,400,400,80);
-//                search.setVisible(true);
-//                String inputV = input.getText();
-//
-//                next.addMouseListener(new MouseAdapter() {
-//                    @Override
-//                    public void mousePressed(MouseEvent e) {
-//                        super.mousePressed(e);
-//                        String inputV = input.getText();
-//                        System.out.println(inputV);
-//                        ArrayList list = new ArrayList();
-//                        if(jta.getSelectedText() == null) {
-//                            int a = jta.getText().indexOf(inputV);
-//                            int length = inputV.length();
-//                            list.add(0);
-//                            jta.setSelectionStart(a);
-//                            jta.setSelectionEnd(a + length);
-//                        }else{
-//                            int length = inputV.length();
-//                            int a = jta.getText().lastIndexOf(inputV, (Integer) list.get(-1));
-//                            list.add(a);
-//                            jta.setSelectionStart(a);
-//                            jta.setSelectionEnd(a + length);
-//                        }
-//                    }
-//                });
-//
             }
 
         });
